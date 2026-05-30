@@ -4,14 +4,11 @@ import { UserButton, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 
 async function getData() {
-  const res = await fetch(
-  `${process.env.VERCEL_URL
+  const base = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000"}/api/compensations`,
-  {
-    cache: "no-store",
-  }
-);
+    : "http://localhost:3000";
+  const res = await fetch(`${base}/api/compensations`, { cache: "no-store" });
+  if (!res.ok) return [];
   return res.json();
 }
 
