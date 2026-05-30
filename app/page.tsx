@@ -4,9 +4,12 @@ import { UserButton, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 
 async function getData() {
-  const res = await fetch("http://localhost:3000/api/compensations", {
+  const res = await fetch(
+  `${process.env.NEXT_PUBLIC_APP_URL}/api/compensations`,
+  {
     cache: "no-store",
-  });
+  }
+);
   return res.json();
 }
 

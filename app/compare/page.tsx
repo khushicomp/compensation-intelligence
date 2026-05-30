@@ -4,9 +4,12 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 async function getData() {
-  const res = await fetch("http://localhost:3000/api/compare", {
+  const res = await fetch(
+  `${process.env.NEXT_PUBLIC_APP_URL}/api/compensations`,
+  {
     cache: "no-store",
-  });
+  }
+);
 
   if (!res.ok) {
     throw new Error("Failed to fetch comparison data");
