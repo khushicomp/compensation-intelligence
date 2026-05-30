@@ -5,7 +5,9 @@ import { redirect } from "next/navigation";
 
 async function getData() {
   const res = await fetch(
-  `${process.env.NEXT_PUBLIC_APP_URL}/api/compensations`,
+  `${process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000"}/api/compensations`,
   {
     cache: "no-store",
   }
