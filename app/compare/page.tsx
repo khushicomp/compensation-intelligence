@@ -4,19 +4,11 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 async function getData() {
-  const res = await fetch(
-  `${process.env.VERCEL_URL
+  const base = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000"}/api/compensations`,
-  {
-    cache: "no-store",
-  }
-);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch comparison data");
-  }
-
+    : "http://localhost:3000";
+  const res = await fetch(`${base}/api/compensations`, { cache: "no-store" });
+  if (!res.ok) return [];
   return res.json();
 }
 
