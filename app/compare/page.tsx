@@ -16,13 +16,19 @@ async function getData() {
   }
 }
 
-export default async function ComparePage() {
+export default async function ComparePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ left?: string; right?: string }>;
+}) {
   const data = await getData();
   const { userId } = await auth();
 
   if (!userId) {
     redirect("/");
   }
+
+  const { left, right } = await searchParams;
 
   return (
     <div className="min-h-screen bg-[#f4efe6] text-[#1c1a17] [background-image:radial-gradient(1200px_600px_at_80%_-10%,#fbf8f2_0%,transparent_60%)]">
@@ -61,7 +67,11 @@ export default async function ComparePage() {
 
         <div className="my-9 h-px bg-gradient-to-r from-[#e3dccd] to-transparent" />
 
-        <CompareClient data={data} />
+        <CompareClient
+          data={data}
+          initialLeftId={left ? Number(left) : undefined}
+          initialRightId={right ? Number(right) : undefined}
+        />
       </div>
     </div>
   );

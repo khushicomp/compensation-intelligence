@@ -2,9 +2,27 @@
 
 import { useState } from "react";
 
-export default function CompareClient({ data }: { data: any[] }) {
-  const [leftId, setLeftId] = useState(data[0]?.id);
-  const [rightId, setRightId] = useState(data[1]?.id);
+export default function CompareClient({
+  data,
+  initialLeftId,
+  initialRightId,
+}: {
+  data: any[];
+  initialLeftId?: number;
+  initialRightId?: number;
+}) {
+  const [leftId, setLeftId] = useState(() => {
+    if (initialLeftId && data.some(item => item.id === initialLeftId)) {
+      return initialLeftId;
+    }
+    return data[0]?.id;
+  });
+  const [rightId, setRightId] = useState(() => {
+    if (initialRightId && data.some(item => item.id === initialRightId)) {
+      return initialRightId;
+    }
+    return data[1]?.id || data[0]?.id;
+  });
 
   const left = data.find((item) => item.id === Number(leftId));
   const right = data.find((item) => item.id === Number(rightId));

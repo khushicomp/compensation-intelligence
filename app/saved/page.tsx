@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import SavedClient from "@/components/SavedClient";
 
 export default async function SavedPage() {
   const { userId } = await auth();
@@ -9,9 +10,61 @@ export default async function SavedPage() {
     redirect("/");
   }
 
-  const data = await prisma.savedComparison.findMany({
+  // 1. Fetch saved comparisons
+  const savedList = await prisma.savedComparison.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
+  });
+
+  // 2. Extract unique compensation IDs
+  const compIds = Array.from(
+    new Set(
+      savedList.flatMap((item) => [item.leftComp, item.rightComp])
+    )
+  );
+
+  // 3. Fetch all matching compensations in one query
+  const compensations = await prisma.compensation.findMany({
+    where: { id: { in: compIds } },
+    include: { company: true },
+  });
+
+  // 4. Map for quick lookup
+  const compMap = new Map(compensations.map((c) => [c.id, c]));
+
+  // 5. Enrich and serialize data for client component
+  const serializedComparisons = savedList.map((item) => {
+    const leftComp = compMap.get(item.leftComp) || null;
+    const rightComp = compMap.get(item.rightComp) || null;
+
+    return {
+      id: item.id,
+      createdAt: item.createdAt.toISOString(),
+      left: leftComp
+        ? {
+            id: leftComp.id,
+            role: leftComp.role,
+            level: leftComp.level,
+            location: leftComp.location,
+            totalComp: leftComp.totalComp,
+            company: {
+              name: leftComp.company.name,
+            },
+          }
+        : null,
+      right: rightComp
+        ? {
+            id: rightComp.id,
+            role: rightComp.role,
+            level: rightComp.level,
+            location: rightComp.location,
+            totalComp: rightComp.totalComp,
+            company: {
+              name: rightComp.company.name,
+            },
+          }
+        : null,
+    };
   });
 
   return (
@@ -49,38 +102,7 @@ export default async function SavedPage() {
 
         <div className="my-9 h-px bg-gradient-to-r from-[#e3dccd] to-transparent" />
 
-        {data.length === 0 ? (
-          <div className="rounded-[18px] border border-[#e3dccd] bg-[#fbf8f2] px-6 py-14 text-center">
-            <p className="font-serif italic text-[#a59c8d]">
-              No saved comparisons yet.
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-hidden rounded-[18px] border border-[#e3dccd] bg-[#fbf8f2] shadow-[0_20px_50px_-30px_rgba(60,50,30,0.4)]">
-            <div className="divide-y divide-[#e3dccd]">
-              {data.map((item: any) => (
-                <div
-                  key={item.id}
-                  className="px-6 py-5 transition-colors hover:bg-[#9a7b3f]/[0.045]"
-                >
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#a59c8d]">
-                    Comparison #{item.id}
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-4 text-sm text-[#6b6459]">
-                    <span>
-                      <span className="font-medium text-[#1c1a17]">Left:</span>{" "}
-                      {item.leftComp}
-                    </span>
-                    <span>
-                      <span className="font-medium text-[#1c1a17]">Right:</span>{" "}
-                      {item.rightComp}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <SavedClient initialComparisons={serializedComparisons} />
       </div>
     </div>
   );
