@@ -2,7 +2,7 @@
 
 Compensation Intelligence v2 is a modern, high-fidelity salary tracking and side-by-side offer comparison dashboard designed to help candidates evaluate job offers, analyze company pay scales, and track their negotiation options.
 
-## 🚀 Key Features
+##  Key Features
 
 *   **Offer Dashboard**: Overview of all recorded compensation packages with clean filtering and location/role badges.
 *   **Deep-Linked Side-by-Side Comparison**: Compare two offers dynamically. Share comparison links easily with parameters (e.g., `/compare?left=1&right=2`).
@@ -12,7 +12,7 @@ Compensation Intelligence v2 is a modern, high-fidelity salary tracking and side
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 *   **Framework**: [Next.js 16](https://nextjs.org/) (App Router with dynamic server components)
 *   **UI Library**: [React 19](https://react.dev/)
@@ -23,7 +23,7 @@ Compensation Intelligence v2 is a modern, high-fidelity salary tracking and side
 
 ---
 
-## 🗄️ Database Schema
+##  Database Schema
 
 The database model is managed via Prisma ([prisma/schema.prisma](file:///c:/Users/khush/compensation-intelligence-v2/prisma/schema.prisma)):
 
@@ -34,7 +34,7 @@ The database model is managed via Prisma ([prisma/schema.prisma](file:///c:/User
 
 ---
 
-## 🏃 Getting Started
+##  Getting Started
 
 ### 1. Prerequisites
 Ensure you have Node.js installed on your system.
@@ -73,7 +73,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to view th
 
 ---
 
-## 📦 Production Build & Deployment
+##  Production Build & Deployment
 
 To verify the app builds properly before deploying:
 ```bash
