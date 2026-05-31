@@ -2,14 +2,18 @@ import CompareClient from "@/components/CompareClient";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
 
 async function getData() {
-  const base = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
-  const res = await fetch(`${base}/api/compensations`, { cache: "no-store" });
-  if (!res.ok) return [];
-  return res.json();
+  try {
+    return await prisma.compensation.findMany({
+      include: { company: true },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    console.error("Error fetching compensations:", error);
+    return [];
+  }
 }
 
 export default async function ComparePage() {
