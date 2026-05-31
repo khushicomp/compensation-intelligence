@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Compensation Intelligence v2
 
-## Getting Started
+Compensation Intelligence v2 is a modern, high-fidelity salary tracking and side-by-side offer comparison dashboard designed to help candidates evaluate job offers, analyze company pay scales, and track their negotiation options.
 
-First, run the development server:
+## 🚀 Key Features
 
+*   **Offer Dashboard**: Overview of all recorded compensation packages with clean filtering and location/role badges.
+*   **Deep-Linked Side-by-Side Comparison**: Compare two offers dynamically. Share comparison links easily with parameters (e.g., `/compare?left=1&right=2`).
+*   **Saved Comparisons History**: Save comparisons to your profile. Revisit or delete them later with a dedicated history dashboard.
+*   **Company Analytics & Pay Scales**: High-fidelity company pages showing average compensation, highest salary, and a visual pay distribution scale grouped by engineering level (e.g., L3, L4, L5).
+*   **Secure Authentication**: Fully integrated with Clerk for secure user login, sign-up, and comparison isolation.
+
+---
+
+## 🛠️ Technology Stack
+
+*   **Framework**: [Next.js 16](https://nextjs.org/) (App Router with dynamic server components)
+*   **UI Library**: [React 19](https://react.dev/)
+*   **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) with a warm neutral premium theme
+*   **Database**: PostgreSQL hosted on [Neon](https://neon.tech/)
+*   **ORM**: [Prisma](https://www.prisma.io/)
+*   **Authentication**: [Clerk NextJS](https://clerk.com/)
+
+---
+
+## 🗄️ Database Schema
+
+The database model is managed via Prisma ([prisma/schema.prisma](file:///c:/Users/khush/compensation-intelligence-v2/prisma/schema.prisma)):
+
+*   **Company**: Holds company names (e.g., Google, Amazon, Microsoft).
+*   **Compensation**: Tracks roles, levels, location, base salaries, stock, bonuses, total compensations, and company associations.
+*   **User**: Isolated user entries for database mapping.
+*   **SavedComparison**: Maps a user's comparison history between two compensation records.
+
+---
+
+## 🏃 Getting Started
+
+### 1. Prerequisites
+Ensure you have Node.js installed on your system.
+
+### 2. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Setup Environment Variables
+Create a `.env` file in the root directory (based on `.env` settings) containing:
+```env
+DATABASE_URL="your-postgresql-neon-database-url"
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="your-clerk-publishable-key"
+CLERK_SECRET_KEY="your-clerk-secret-key"
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Database Setup & Seeding
+Push the database schema and run the seed script to pre-populate dummy records:
+```bash
+# Push database schema
+npx prisma db push
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Generate Prisma Client
+npx prisma generate
 
-## Learn More
+# Seed the database
+npx prisma db seed
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 5. Start Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to view the application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📦 Production Build & Deployment
 
-## Deploy on Vercel
+To verify the app builds properly before deploying:
+```bash
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This app can be deployed out-of-the-box on **Vercel**:
+1. Connect your repository to Vercel.
+2. Add your environment variables (`DATABASE_URL`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`) under Project Settings.
+3. Deploy!
