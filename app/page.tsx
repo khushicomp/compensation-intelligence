@@ -16,6 +16,9 @@ export default async function Home() {
   const data = await getData();
   const { userId } = await auth();
 
+console.log("DATA LENGTH:", data.length);
+console.log("DATA:", data);
+
   return (
     <>
       <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#e3dccd] bg-[#f4efe6]/95 px-6 py-3 backdrop-blur-sm">
